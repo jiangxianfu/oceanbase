@@ -10,7 +10,7 @@ jobs:
   build:
     strategy:
       matrix: 
-        image: ['ubuntu:22.04', 'centos:7']
+        image: ['ubuntu:22.04', 'centos:7', 'almalinux:9']
     runs-on: ubuntu-20.04
     container: ${{ matrix.image }}
     steps:
@@ -27,6 +27,11 @@ jobs:
     - name: Install centos environment
       shell: bash
       if: ${{ startsWith(matrix.image, 'centos') }}
+      run: yum install -y git wget rpm* cpio make glibc-devel glibc-headers binutils m4
+
+    - name: Install almalinux environment
+      shell: bash
+      if: ${{ startsWith(matrix.image, 'almalinux') }}
       run: yum install -y git wget rpm* cpio make glibc-devel glibc-headers binutils m4
 
     - name: Cache deps
